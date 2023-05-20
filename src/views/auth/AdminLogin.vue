@@ -1,20 +1,120 @@
 <script setup>
-    import {ref} from 'vue'
+	import {onMounted, reactive, ref} from 'vue'
+	import {ElMessage} from 'element-plus'
+	import {handleLogin} from '@/api/request'
+	import {encrypt} from '@/utils/jsencrypt'
+    import {useRouter} from 'vue-router'
+	import Cookies from 'js-cookie'
 
-	const loginDto = ref({
+    const router = useRouter()
+    const loginFormRef = ref()
+	const loginFormDto = ref({
         username: '',
         password: ''
+    })
+    
+    const APP_NAME = import.meta.env.VITE_APP_NAME
+    
+    const rules = reactive({
+        username: [
+			{required: true, message: '请输入用户名', trigger: 'blur'},
+            {min: 11, max: 11, message: '请输入11位内地手机号', trigger: 'blur'}
+        ],
+        password: [
+            {required: true, message: '请输入密码', trigger: 'blur'},
+            {min: 4, max: 20, message: '请输入4-20位密码', trigger: 'blur'}
+        ]
+    })
+
+	const resetForm = (formEl) => {
+		if (!formEl) {
+			return
+		}
+		formEl.resetFields()
+	}
+	
+	const loading = ref(false)
+	
+	const submitForm = async (formRef) => {
+		if (!formRef) {
+			ElMessage.error('请输入用户名与密码')
+			return
+        }
+		await formRef.validate(async (valid) => {
+			if (!valid) {
+				ElMessage.error('请检查输入是否正确')
+			} else {
+				loading.value = true
+                try {
+					const tmpLoginDto = {
+						username: loginFormDto.value.username,
+						password: encrypt(loginFormDto.value.password)
+					}
+					const data = await handleLogin(tmpLoginDto)
+					if (data !== null) {
+						Cookies.set('token', data.result.token)
+                        await router.push('/main')
+					}
+				} catch (e) {
+                    ElMessage.error('登录失败')
+				} finally {
+                    loading.value = false
+				}
+            }
+		})
+    }
+	
+	onMounted(() => {
+		resetForm(loginFormRef.value)
+        document.onkeydown = (e) => {
+            if (e.key === 'Enter') {
+                submitForm(loginFormRef.value)
+            }
+        }
     })
 </script>
 
 <template>
     <div class="login-container">
-        <div class="login-form-box">
-            <el-card
-                shadow="always"
+        <div class="login-form-box" v-loading="loading">
+            <div
+                class="form-card"
             >
-            
-            </el-card>
+                <el-card style="border-radius: 10px">
+                    <h1>{{APP_NAME}}</h1>
+                    <el-image
+                        src="/carpooling.svg"
+                        :fit="'cover'"
+                        class="icon"
+                    />
+                    <div class="form-box">
+                        <el-form
+                            ref="loginFormRef"
+                            :model="loginFormDto"
+                            :label-width="'5rem'"
+                            status-icon
+                            :rules="rules"
+                        >
+                            <el-form-item label="用户名" prop="username">
+                                <el-input v-model="loginFormDto.username" clearable></el-input>
+                            </el-form-item>
+                            <el-form-item label="密码" prop="password">
+                                <el-input v-model="loginFormDto.password" type="password" clearable>
+                                </el-input>
+                            </el-form-item>
+                        </el-form>
+                        <div class="button-area">
+                            <el-button type="primary" @click="submitForm(loginFormRef)"
+                            >
+                                登录
+                            </el-button>
+                            <el-button @click="resetForm(loginFormRef)">
+                                重置
+                            </el-button>
+                        </div>
+                    </div>
+                </el-card>
+            </div>
         </div>
     </div>
 </template>
@@ -35,13 +135,36 @@
             width: 40%;
             height: 80%;
             margin-right: 5%;
-            .el-card {
+            .form-card {
                 height: 100%;
                 // 透明度
                 background-color: rgba(255, 255, 255, 0.7);
+                border-radius: 10px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                text-align: center;
+                .icon{
+                    width: 30%;
+                    height: 30%;
+                    margin-top: 10%;
+                }
+                .form-box{
+                    margin-top: 10%;
+                    // 使用deep进行样式穿透
+                    /deep/ .el-form-item__label{
+                        // 字号2rem
+                        font-size: 1rem;
+                    }
+                    /deep/ .el-form-item__inner{
+                        // 字号2rem
+                        font-size: 1rem;
+                    }
+                    .button-area{
+                        display: flex;
+                        justify-content: space-around;
+                    }
+                }
             }
         }
     }

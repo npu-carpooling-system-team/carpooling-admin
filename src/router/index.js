@@ -54,10 +54,9 @@ router.beforeEach((to, from, next) => {
 	}
 	const token = Cookies.get('token')
 	if (!token) {
-		ElMessage({
-			type: 'error',
-			message: '请先登录'
-		})
+		ElMessage.error(
+			'请先登录'
+		)
 		return next('/login')
 	}
 	next()
