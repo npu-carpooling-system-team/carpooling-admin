@@ -1,6 +1,6 @@
 <script setup>
 	import {onMounted, reactive, ref} from 'vue'
-	import {ElMessage} from 'element-plus'
+	import {ElMessage, ElLoading} from 'element-plus'
 	import {handleLogin} from '@/api/request'
 	import {encrypt} from '@/utils/jsencrypt'
     import {useRouter} from 'vue-router'
@@ -52,6 +52,24 @@
 					}
 					const data = await handleLogin(tmpLoginDto)
 					if (data !== null) {
+						if(data.result.role === 0) {
+							resetForm(loginFormRef.value)
+							const loading = ElLoading.service({
+								lock: true,
+								text: '该账号为一般用户账号,3秒后跳转到客户端',
+								background: 'rgba(0, 0, 0, 0.7)'
+							})
+							setTimeout(() => {
+								loading.close()
+								window.location.href =
+                                    'https://carpooling-client.wangminan.me/#/oauth/alipay/success' +
+									'?token=' +
+									data.result.token +
+									'&id=' +
+									data.result.id
+                            }, 3000)
+                            return
+                        }
 						Cookies.set('token', data.result.token)
                         await router.push('/main')
 					}
@@ -91,15 +109,31 @@
                         <el-form
                             ref="loginFormRef"
                             :model="loginFormDto"
-                            :label-width="'5rem'"
                             status-icon
                             :rules="rules"
                         >
-                            <el-form-item label="用户名" prop="username">
-                                <el-input v-model="loginFormDto.username" clearable></el-input>
+                            <el-form-item prop="username">
+                                <el-input
+                                    placeholder="请输入用户名"
+                                    v-model="loginFormDto.username"
+                                    clearable>
+                                    <template #prefix>
+                                        <el-icon class="el-input__icon">
+                                            <User />
+                                        </el-icon>
+                                    </template>
+                                </el-input>
                             </el-form-item>
-                            <el-form-item label="密码" prop="password">
-                                <el-input v-model="loginFormDto.password" type="password" clearable>
+                            <el-form-item prop="password">
+                                <el-input
+                                    placeholder="请输入密码"
+                                    v-model="loginFormDto.password"
+                                    type="password" clearable>
+                                    <template #prefix>
+                                        <el-icon class="el-input__icon">
+                                            <Lock />
+                                        </el-icon>
+                                    </template>
                                 </el-input>
                             </el-form-item>
                         </el-form>
@@ -152,11 +186,11 @@
                 .form-box{
                     margin-top: 10%;
                     // 使用deep进行样式穿透
-                    /deep/ .el-form-item__label{
+                    ::v-deep(.el-form-item__label){
                         // 字号2rem
                         font-size: 1rem;
                     }
-                    /deep/ .el-form-item__inner{
+                    ::v-deep(.el-form-item__inner){
                         // 字号2rem
                         font-size: 1rem;
                     }

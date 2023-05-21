@@ -25,6 +25,14 @@ const routes = [
 		}
 	},
 	{
+		path: '/preHandleLogin',
+		name: 'preHandleLogin',
+		component: () => import('../views/auth/PreHandleLogin.vue'),
+		meta: {
+			title: '西工大拼车系统-登录预处理'
+		}
+	},
+	{
 		path: '/404',
 		name: 'NotFound',
 		component: () => import('../views/common/NotFound.vue'),
@@ -49,7 +57,7 @@ router.beforeEach((to, from, next) => {
 	if (to.meta.title) {
 		document.title = to.meta.title
 	}
-	if (to.path === '/login') {
+	if (to.path === '/login' || to.path === '/404' || to.path === '/preHandleLogin') {
 		return next()
 	}
 	const token = Cookies.get('token')
