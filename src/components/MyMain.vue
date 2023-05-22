@@ -91,18 +91,21 @@
         fake.start()
         try {
 			const data = await genTotalList(downloadAllDto.value)
-            // 使用如下方式防止拦截
-			const tempWindow = window.open('_blank') // 先打开页面
-			tempWindow.location = data.result // 后更改页面地址
-            // 清除downloadAllDto中的数据
-            downloadAllDto.value.beginTime = ''
-            downloadAllDto.value.endTime = ''
-            downloadAllDto.value.driverId = ''
-            // 防止刷新之后出现奇奇怪怪的东西
-            await router.push('/main')
+            if (data !== null) {
+				// 使用如下方式防止拦截
+				const tempWindow = window.open('_blank') // 先打开页面
+				tempWindow.location = data.result // 后更改页面地址
+				await router.push('/main')
+            } else {
+				ElMessage.error(`生成失败,您可以关闭页面或刷新重试`)
+            }
         } catch (e) {
             ElMessage.error('生成失败,您可以关闭页面或刷新重试')
 		} finally {
+			// 清除downloadAllDto中的数据
+			downloadAllDto.value.beginTime = ''
+			downloadAllDto.value.endTime = ''
+			downloadAllDto.value.driverId = ''
             isDownloading.value = false
             fake.end()
             showDownloadTotalDialog.value = false
@@ -122,15 +125,19 @@
         fake.start()
         try {
             const data = await genPraiseList(downloadPraiseDto.value)
-            const tempWindow = window.open('_blank')
-            tempWindow.location = data.result
-			// 清除downloadPraiseDto中的数据
-            downloadPraiseDto.value.beginTime = ''
-            downloadPraiseDto.value.endTime = ''
-            await router.push('/main')
+            if (data !== null) {
+				const tempWindow = window.open('_blank')
+				tempWindow.location = data.result
+				await router.push('/main')
+            } else {
+				ElMessage.error('生成失败,您可以关闭页面或刷新重试')
+            }
         } catch (e) {
             ElMessage.error('生成失败,您可以关闭页面或刷新重试')
         } finally {
+			// 清除downloadPraiseDto中的数据
+			downloadPraiseDto.value.beginTime = ''
+			downloadPraiseDto.value.endTime = ''
             isDownloading.value = false
             fake.end()
             showDownloadPraiseDialog.value = false

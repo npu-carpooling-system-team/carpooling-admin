@@ -75,7 +75,7 @@ try {
 			params: {
 				beginTime: downloadAllDto.beginTime,
 				endTime: downloadAllDto.endTime,
-				driverId: downloadAllDto.driverId,
+				driverId: downloadAllDto.driverId
 			}
 		})
 		if (data.code !== null && data.code === 2000) {
