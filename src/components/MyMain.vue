@@ -167,6 +167,7 @@
 		} finally {
             loading.close()
 		}
+		ElMessage.warning('首次导出时可能出现未知异常,此时请您允许该页面打开新窗口后重试导出操作。')
 		await getDriversList()
     })
 </script>
@@ -234,7 +235,7 @@
             <span>导出全部拼车记录</span>
         </template>
         <div class="download-all-box">
-            <p>以下所有参数均为可选项</p>
+            <p>以下所有参数均为可选项(非必选)</p>
             <el-form :inline="true" :model="downloadAllDto">
                 <el-form-item>
                     <el-date-picker
@@ -302,20 +303,20 @@
             <span>导出拼车订单排名</span>
         </template>
         <div class="download-all-box">
-            <p>以下所有参数均为可选项</p>
+            <p>以下所有参数均为可选项(非必选)</p>
             <el-form :inline="true" :model="downloadAllDto">
                 <el-form-item>
                     <el-date-picker
-                            v-model="downloadAllDto.beginTime"
-                            type="date"
-                            placeholder="请选择开始日期"
+                        v-model="downloadAllDto.beginTime"
+                        type="date"
+                        placeholder="请选择开始日期"
                     />
                 </el-form-item>
                 <el-form-item>
                     <el-date-picker
-                            v-model="downloadAllDto.endTime"
-                            type="date"
-                            placeholder="请选择截止日期"
+                        v-model="downloadAllDto.endTime"
+                        type="date"
+                        placeholder="请选择截止日期"
                     />
                 </el-form-item>
             </el-form>
