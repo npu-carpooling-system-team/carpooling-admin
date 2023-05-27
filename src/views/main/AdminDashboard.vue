@@ -17,19 +17,19 @@ import MyMain from "@/components/MyMain.vue";
 </template>
 
 <style lang="less" scoped>
-  .common-layout{
-    height: 100%;
-    width: 100%;
-    .el-container{
-      height: 100%;
-      width: 100%;
-      .el-header{
-        padding: 0;
-      }
-      .el-main{
-        width: 100%;
+    .common-layout{
         height: 100%;
-      }
+        width: 100%;
+        .el-container{
+            height: 100%;
+            width: 100%;
+            .el-header{
+                padding: 0;
+            }
+            .el-main{
+                width: 100%;
+                height: 100%;
+            }
+        }
     }
-  }
 </style>
