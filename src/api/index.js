@@ -1,5 +1,4 @@
 import axios from 'axios'
-import Cookies from 'js-cookie'
 import {ElMessage} from 'element-plus'
 import {start, stop} from '@/utils/nprogressUtil'
 
@@ -11,8 +10,8 @@ _axios.interceptors.request.use(
 	(req) => {
 		start()
 		// 比如在这里添加统一的 headers
-		if (Cookies.get('token') !== undefined) {
-			req.headers.Authorization = 'Bearer ' + Cookies.get('token')
+		if (window.localStorage.getItem('token') !== undefined) {
+			req.headers.Authorization = 'Bearer ' + window.localStorage.getItem('token')
 		}
 		return req
 	},
@@ -27,7 +26,7 @@ _axios.interceptors.response.use(
 		stop()
 		if (res !== null && res.data !== null && res.data.code !== null){
 			if (res.data.code === 4012 || res.data.code === 4010 || res.data.code === 4030) {
-				Cookies.remove('token')
+				window.localStorage.removeItem('token')
 				ElMessage.error('登录过期，将跳转至登录页')
 				// 倒计时
 				setTimeout(() => {

@@ -2,7 +2,6 @@
     import {useRouter} from 'vue-router'
 	import {onMounted} from 'vue'
 	import {ElMessage} from 'element-plus'
-	import Cookies from 'js-cookie'
     
     const router = useRouter()
     
@@ -15,7 +14,7 @@
             }, 2000)
             return
         }
-		Cookies.set('token', token)
+		window.localStorage.setItem('token', token)
         ElMessage.success('登录成功,即将跳转到管理界面')
         setTimeout(async () => {
 			await router.push('/main')

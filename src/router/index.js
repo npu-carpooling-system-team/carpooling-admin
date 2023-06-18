@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Cookies from 'js-cookie'
 import { ElMessage } from 'element-plus'
 
 const routes = [
@@ -67,7 +66,7 @@ router.beforeEach((to, from, next) => {
     if (whiteList.includes(to.path)) {
         return next()
     }
-    const token = Cookies.get('token')
+    const token = window.localStorage.getItem('token')
     if (!token) {
         ElMessage.error(
             '请先登录'

@@ -4,7 +4,6 @@
 	import {handleLogin} from '@/api/request'
 	import {encrypt} from '@/utils/jsencrypt'
     import {useRouter} from 'vue-router'
-	import Cookies from 'js-cookie'
 
     const router = useRouter()
     const loginFormRef = ref()
@@ -70,7 +69,7 @@
                             }, 3000)
                             return
                         }
-						Cookies.set('token', data.result.token)
+                        window.localStorage.setItem('token', data.result.token)
                         await router.push('/main')
 					}
 				} catch (e) {
