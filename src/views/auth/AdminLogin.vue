@@ -90,6 +90,10 @@
             }
         }
     })
+    
+    const getIconUrl = () => {
+        return new URL('../../assets/images/carpooling.svg', import.meta.url).href
+    }
 </script>
 
 <template>
@@ -101,7 +105,7 @@
                 <el-card style="border-radius: 10px">
                     <h1>{{APP_NAME}}</h1>
                     <el-image
-                        src="/carpooling.svg"
+                        :src="getIconUrl()"
                         :fit="'cover'"
                         class="icon"
                     />
