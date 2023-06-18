@@ -1,40 +1,33 @@
-# electron-quick-start
+在为版本添加tag时会触发该自动打包
 
-**Clone and run for a quick way to see Electron in action.**
+使用如下命令以查看历史tag
 
-This is a minimal Electron application based on the [Quick Start Guide](https://electronjs.org/docs/latest/tutorial/quick-start) within the Electron documentation.
-
-A basic Electron application needs just these files:
-
-- `package.json` - Points to the app's main file and lists its details and dependencies.
-- `main.js` - Starts the app and creates a browser window to render HTML. This is the app's **main process**.
-- `index.html` - A web page to render. This is the app's **renderer process**.
-- `preload.js` - A content script that runs before the renderer process loads.
-
-You can learn more about each of these components in depth within the [Tutorial](https://electronjs.org/docs/latest/tutorial/tutorial-prerequisites).
-
-## To Use
-
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
-
-```bash
-# Clone this repository
-git clone https://github.com/electron/electron-quick-start
-# Go into the repository
-cd electron-quick-start
-# Install dependencies
-npm install
-# Run the app
-npm start
+```shell
+git tag
 ```
 
-Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
+使用如下命令为最新的commit添加tag
 
-## Resources for Learning Electron
+```shell
+git tag -a v1.0.0 -m "version 1.0.0"
+```
+其中 -a 为添加tag的命令，v1.0.0为tag的名称，-m为添加tag的说明
 
-- [electronjs.org/docs](https://electronjs.org/docs) - all of Electron's documentation
-- [Electron Fiddle](https://electronjs.org/fiddle) - Electron Fiddle, an app to test small Electron experiments
+可以使用
 
-## License
+```shell
+git show
+```
 
-[CC0 1.0 (Public Domain)](LICENSE.md)
+查看tag的详细信息
+
+可以使用如下两种命令将tag添加到远程仓库
+
++ ```shell
+    git push origin v1.0.0
+    ```
++ ```shell
+    git push origin --tags
+    ```
+
+其中第一种命令只会将指定的tag推送到远程仓库，第二种命令会将本地所有的tag推送到远程仓库

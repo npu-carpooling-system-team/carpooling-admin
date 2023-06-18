@@ -2,8 +2,6 @@ name: Publish exe release
 
 on:
   push:
-    branches:
-      - electron-build
     tags:
       - 'v*'
 
