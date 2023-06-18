@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - electron-build
+    tags:
+      - 'v*'
 
 jobs:
   cache-and-build-and-publish:
@@ -33,12 +35,8 @@ jobs:
 
       - name: Create Release and Upload Release Asset
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
-          tag_name: ${{ github.ref }}
-          name: Release ${{ github.ref }}
           body: 使用electron打包后发布
-          draft: false
           prerelease: false
           files: |
             carpooling-admin-win32-x64.zip
