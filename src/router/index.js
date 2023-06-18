@@ -52,12 +52,19 @@ const router = createRouter({
 	routes
 })
 
+const whiteList = [
+	'/',
+	'/login',
+	'/404',
+	'/preHandleLogin'
+]
+
 router.beforeEach((to, from, next) => {
 	// 挂载页面名称
 	if (to.meta.title) {
 		document.title = to.meta.title
 	}
-	if (to.path === '/login' || to.path === '/404' || to.path === '/preHandleLogin') {
+	if (whiteList.includes(to.path)) {
 		return next()
 	}
 	const token = Cookies.get('token')
@@ -67,7 +74,7 @@ router.beforeEach((to, from, next) => {
 		)
 		return next('/login')
 	}
-	next()
+	return next()
 })
 
 export default router
